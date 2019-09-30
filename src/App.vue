@@ -115,9 +115,9 @@ export default {
     return {
       timer: 0,
       highestScore: {
-        easy: '---,',
-        medium: '---',
-        hard: '---'
+        easy: Infinity,
+        medium: Infinity,
+        hard: Infinity
       },
       timerInterval: null,
       isWin: false,
@@ -175,13 +175,16 @@ export default {
   methods: {
     readHighestScore () {
       let highestScore = this.highestScore
+      
+      const cached = localStorage.getItem(HIGHEST_SCORE_CACHE_KEY)
 
-      try {
-        const cached = localStorage.getItem(HIGHEST_SCORE_CACHE_KEY)
-        const parsedCache = JSON.parse(cached)
-        highestScore = parsedCache
-      } catch (e) {
-        //
+      if (cached) {
+        try {
+          const parsedCache = JSON.parse(cached)
+          highestScore = parsedCache
+        } catch (e) {
+          //
+        }
       }
 
       this.highestScore = highestScore
