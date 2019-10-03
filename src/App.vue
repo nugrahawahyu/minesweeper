@@ -74,6 +74,41 @@
           </div>
         </template>
     </Modal>
+    <Modal v-if="showOnBoarding">
+      <template slot="body">
+        <div class="container">
+          <div class="flex-grid">
+            <div class="col">
+                <div class="flex-grid">
+                  <div class="col align-right">
+                    Open a tile:
+                  </div>
+                  <div class="col align-left" style="margin-left: 10px;">
+                    Left click
+                  </div>
+                </div>
+            </div>
+          </div>
+          <div class="flex-grid">
+            <div class="col">
+                <div class="flex-grid">
+                  <div class="col align-right">
+                    Toggle a flag:
+                  </div>
+                  <div class="col align-left" style="margin-left: 10px;">
+                    Right click
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </template>
+      <template slot="footer">
+        <div>
+          <button @click="completeOnBoarding">Got It</button>
+        </div>
+      </template>
+    </Modal>
   </div>
 </template>
 
@@ -126,7 +161,8 @@ export default {
       started: false,
       config: configs[0],
       configs,
-      showModal: false
+      showModal: false,
+      showOnBoarding: true
     }
   },
   computed: {
@@ -140,11 +176,12 @@ export default {
       return this.config.mines
     },
     gameReady () {
-      return this.started
+      return this.started || this.showOnBoarding
     },
   },
   watch: {
     config () {
+      if (this.showOnBoarding) return
       this.startGame()
     },
     timerInterval (interval, old) {
@@ -170,7 +207,6 @@ export default {
   },
   created () {
     this.readHighestScore()
-    this.startGame()
   },
   methods: {
     readHighestScore () {
@@ -191,6 +227,10 @@ export default {
     },
     writeHighestScore () {
       localStorage.setItem(HIGHEST_SCORE_CACHE_KEY, JSON.stringify(this.highestScore))
+    },
+    completeOnBoarding () {
+      this.showOnBoarding = false
+      this.startGame()
     },
     startGame () {
       this.started = false
@@ -230,6 +270,10 @@ export default {
   color: #2c3e50;
 }
 
+.container {
+  padding: 32px;
+}
+
 .input-container {
   text-align: left;
   width: 300px;
@@ -262,5 +306,13 @@ export default {
     padding: 20px;
     font-size: 30px;
     text-align: center;
+}
+
+.align-right {
+  text-align: right
+}
+
+.align-left {
+  text-align: left
 }
 </style>
