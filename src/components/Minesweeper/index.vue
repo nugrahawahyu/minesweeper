@@ -141,10 +141,31 @@ export default {
 }
 
 .flex-grid {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
     display: flex;
+    -webkit-flex-flow: row;
+    justify-content: space-around;
+   
+    line-height:30px;
 }
 
 .col {
-    flex: 1;
+    font-weight: bold;
+    font-size: 1.5em;
+    text-align: center;
+    flex: 1 0 auto;
+    height:auto;
+}
+
+.col:before {
+    content:'';
+    float:left;
+    padding-top:100%;
 }
 </style>

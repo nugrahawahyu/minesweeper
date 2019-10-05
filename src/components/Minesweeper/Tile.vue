@@ -1,22 +1,26 @@
 <template>
     <div 
         class="board-tile"
-        :class="{ visited }"
+        :class="containerClass"
         @click="$emit('visit', { row, column })"
         @click.right.prevent="$emit('toggle-flagged', { row, column })" >
         <template v-if="flagged">
-            <span class="white">F</span>
+            <div class="tile-container">
+                <div class="tile-content">F</div>
+            </div>
         </template>
         <template v-else-if="(isWin || isLoss) && value === -1">
-            <div class="blue" :class="{ 'bg-red black red': marked }">
-                <span>B</span>
+            <div class="tile-container">
             </div>
         </template>
         <template v-else-if="visited">
-            <span :class="{gray: value === 0}">{{ value }}</span>
+            <div class="tile-container">
+                <div class="tile-content">{{ value }}</div>
+            </div>
         </template>
         <template v-else>
-            <span class="blue">-</span>
+            <div class="tile-container">
+            </div>
         </template>
     </div>
 </template>
@@ -57,41 +61,58 @@ export default {
             required: true
         }
     },
+    computed: {
+        containerClass () {
+            return {
+                flagged: this.flagged,
+                visited: this.visited,
+                marked: this.marked,
+                empty: this.value === 0
+            }
+        }
+    }
 }
 </script>
 
 <style scoped>
-.white {
+.tile-container {
+    position: relative;
+    height: 100%;
+}
+
+.tile-content {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    font-size: 14px;
+    top: 50%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%)
+}
+
+.board-tile {
+    height: 100%;
+    color: blue;
+    background-color: blue;
+    border: solid 1px lightblue;
+}
+
+.board-tile.flagged {
     color: white;
 }
 
-.blue {
-    color: blue;
-}
-
-.black {
-    color: black;
-}
-
-.red {
-    color: red;
-}
-
-.gray {
-    color: #eee;
-}
-
-.bg-red {
-    background-color: red;
-}
-
-.visited {
+.board-tile.visited {
     background-color: #eee !important;
     color: black; 
 }
 
-.board-tile {
-    background-color: blue;
-    border: solid 1px lightblue;
+.board-tile.marked {
+    background-color: red;
+    color: red;
+}
+
+.board-tile.empty {
+    color: #eee;
 }
 </style>
