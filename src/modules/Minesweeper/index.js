@@ -10,6 +10,7 @@ export class Minesweeper {
         this.isWin = false
         this.flags = 0
         this.mineIndexes = []
+        this.clickedMine = null
     }
 
     init () {
@@ -69,12 +70,13 @@ export class Minesweeper {
 
         if (node.value === -1) {
             this.isLoss = true
+            this.clickedMine = node
             return
         }
 
         node.visit()
         
-        const neighbors = this.getNeighbor(row, column)
+        const neighbors = this.getNeighbor(row, column).filter((node) => node.value !== -1 && !node.visited)
 
         if (node.value === 0) {
             for (let neighbor of neighbors) {
@@ -84,6 +86,31 @@ export class Minesweeper {
                 this.visit(neighbor.row, neighbor.column)
             }
         }
+    }
+
+    getMinesFromHelper (unvisitedNodes = [], mines = [], stackedNodes = []) {
+        if (!unvisitedNodes.length) return mines
+
+        const current = unvisitedNodes.shift()
+        const row = current.row
+        const column = current.column
+        const neighbors = this.getNeighbor(row, column).filter((neighbor) => !stackedNodes.includes(neighbor))
+
+        if (current.value === -1) {
+            mines.push(current)
+        }
+        
+        neighbors.forEach((neighbor) => {
+            stackedNodes.push(neighbor)
+            unvisitedNodes.push(neighbor)
+        })
+
+        return this.getMinesFromHelper(unvisitedNodes, mines, stackedNodes)
+    }
+
+    getMinesFrom (row, column) {
+        const root = this.board[row][column]
+        return this.getMinesFromHelper([root])
     }
 
     getNeighbor (row, column) {
@@ -96,9 +123,7 @@ export class Minesweeper {
                         continue
                     }
                 const node = this.board[x][y]
-                if (node.value !== -1 && !node.visited) {
-                    neighbors.push(node)
-                }
+                neighbors.push(node)
             }
         }
 
@@ -163,3 +188,18 @@ export class Minesweeper {
         return board
     }
 }
+
+
+
+/**
+ *                             1
+ *                  2                   3  
+ *          4           5       6               7
+ * 
+ * 
+ * 
+ * 
+ *  c = 1; s = [2, 3]
+ *  c = 2; s = [3, 4, 5]
+ *  c = 3; s = [4, 5, 6, 7]
+ */

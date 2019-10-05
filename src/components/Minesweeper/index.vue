@@ -88,13 +88,14 @@ export default {
         },
         async isLoss () {
             if (this.isLoss) {
-                const mineIndexes = this.minesweeper.mineIndexes
+                const { row, column } = this.minesweeper.clickedMine
+                const mineNodes = this.minesweeper.getMinesFrom(row, column)
                 this.disable = true
                 this.$emit('stop')
-                await Boom.animate(this.mineNodes, 5000, () => {
+                await Boom.animate(mineNodes, () => {
                     this.$forceUpdate()
                 })
-                this.$emit('loss', mineIndexes)
+                this.$emit('loss')
             }
         }
     },
