@@ -94,7 +94,7 @@ export class Minesweeper {
         const current = unvisitedNodes.shift()
         const row = current.row
         const column = current.column
-        const neighbors = this.getNeighbor(row, column).filter((neighbor) => !stackedNodes.includes(neighbor))
+        const neighbors = this.getNeighbor(row, column).filter((neighbor) => !stackedNodes.includes(neighbor) && !(neighbor.flagged && neighbor.value === -1))
 
         if (current.value === -1) {
             mines.push(current)
