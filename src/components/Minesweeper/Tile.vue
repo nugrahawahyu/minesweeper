@@ -8,7 +8,7 @@
             <span class="white">F</span>
         </template>
         <template v-else-if="(isWin || isLoss) && value === -1">
-            <div :class="{ 'bg-red black': isMineMarked }">
+            <div :class="{ 'bg-red black': marked }">
                 <span>B</span>
             </div>
         </template>
@@ -51,18 +51,12 @@ export default {
         column: {
             type: Number,
             required: true
+        },
+        marked: {
+            type: Boolean,
+            required: true
         }
     },
-    data () {
-        return {
-            isMineMarked: false
-        }
-    },
-    methods: {
-        markMine () {
-            this.isMineMarked = true
-        }
-    }
 }
 </script>
 

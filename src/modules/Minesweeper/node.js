@@ -5,6 +5,7 @@ export class Node {
         this.row = row
         this.column = column
         this.flagged = false
+        this.marked = false
     }
 
     visit () {
@@ -13,6 +14,10 @@ export class Node {
 
     toggleFlagged () {
         this.flagged = !this.flagged
+    }
+
+    mark () {
+        this.marked = true
     }
 
     setValue (value) {

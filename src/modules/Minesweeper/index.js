@@ -53,6 +53,10 @@ export class Minesweeper {
             this.flags -= 1
         }
     }
+
+    mark (row, column) {
+        this.board[row][column].mark()
+    }
     
     visit (row, column) {
         if (row < 0 || column < 0 || row >= this.row || column > this.column) return

@@ -12,6 +12,7 @@
                     :column="j"
                     :visited="node.visited"
                     :flagged="node.flagged"
+                    :marked="node.marked"
                     :is-win="isWin"
                     :is-loss="isLoss"
                     @visit="visit"
@@ -23,6 +24,7 @@
 
 <script>
 import Tile from './Tile'
+import { Boom } from './boom'
 import { Minesweeper } from '../../modules/Minesweeper'
 
 export default {
@@ -66,15 +68,15 @@ export default {
         flagsLeft () {
             return this.mines - this.minesweeper.flags
         },
-        mineTiles () {
+        mineNodes () {
             const mineIndexes = this.minesweeper.mineIndexes
-            const tiles = []
+            const nodes = []
 
             mineIndexes.forEach((index) => {
-                tiles.push(this.$refs[`tile_${index[0]}_${index[1]}`][0])
+                nodes.push(this.minesweeper.board[index[0]][index[1]])
             })
 
-            return tiles
+            return nodes
         }
     },
     watch: {
@@ -84,12 +86,12 @@ export default {
                 this.$emit('win')
             }
         },
-        isLoss () {
+        async isLoss () {
             if (this.isLoss) {
                 const mineIndexes = this.minesweeper.mineIndexes
                 this.disable = true
-                this.mineTiles.forEach((tile) => {
-                    tile.markMine()
+                await Boom.animate(this.mineNodes, 5000, () => {
+                    this.$forceUpdate()
                 })
                 this.$emit('loss', mineIndexes)
             }
