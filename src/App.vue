@@ -25,6 +25,7 @@
     <template v-if="gameReady" >
       <Minesweeper
         ref="minesweeper"
+        @stop="timerInterval = null"
         @win="isWin = true"
         @loss="isLoss = true"
         @toggle-flag="flagsLeft = $event"

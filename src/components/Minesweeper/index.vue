@@ -90,6 +90,7 @@ export default {
             if (this.isLoss) {
                 const mineIndexes = this.minesweeper.mineIndexes
                 this.disable = true
+                this.$emit('stop')
                 await Boom.animate(this.mineNodes, 5000, () => {
                     this.$forceUpdate()
                 })
