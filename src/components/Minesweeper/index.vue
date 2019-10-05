@@ -1,5 +1,5 @@
 <template>
-    <div class="container">
+    <div class="container" @click="skipAnimate">
         <div class="flex-grid white" v-for="(row, i) of board" :key="i">
             <div 
                 v-for="(node, j) of row"
@@ -51,7 +51,8 @@ export default {
                 column: this.column,
                 totalMine: this.mines
             }),
-            disable: false
+            disable: false,
+            animating: false
         }
     },
     computed: {
@@ -92,8 +93,10 @@ export default {
                 this.disable = true
                 this.$emit('stop')
                 await Boom.animate(mineNodes, () => {
+                    if (!this.animating) this.animating = true
                     this.$forceUpdate()
                 })
+                this.animating = false
                 this.$emit('loss')
             }
         }
@@ -129,6 +132,12 @@ export default {
         },
         check () {
             this.minesweeper.check()
+        },
+        skipAnimate () {
+            if (this.animating) {
+                Boom.skip()
+                this.minesweeper.markAllMines()
+            }
         }
     }
 }

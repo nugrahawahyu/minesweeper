@@ -187,4 +187,10 @@ export class Minesweeper {
 
         return board
     }
+
+    markAllMines () {
+        this.mineIndexes.forEach(([ row, column ]) => {
+            this.board[row][column].mark()
+        })
+    }
 }
