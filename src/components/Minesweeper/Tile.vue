@@ -8,7 +8,7 @@
             <span class="white">F</span>
         </template>
         <template v-else-if="(isWin || isLoss) && value === -1">
-            <div :class="{ 'bg-red black': marked }">
+            <div class="blue" :class="{ 'bg-red black red': marked }">
                 <span>B</span>
             </div>
         </template>
@@ -70,6 +70,10 @@ export default {
 }
 
 .black {
+    color: black;
+}
+
+.red {
     color: red;
 }
 

@@ -22,6 +22,7 @@
 
       </div>  
     </div>
+    
     <template v-if="gameReady" >
       <Minesweeper
         ref="minesweeper"
@@ -34,13 +35,6 @@
         :mines="mines" />
     </template>
 
-    <template v-if="isWin">
-      <span>You win!</span>
-    </template>
-
-    <template v-if="isLoss">
-      <span>You loss!</span>
-    </template>
     <Modal v-if="showModal">
         <template slot="body">
           <div class="flex-grid" style="padding: 32px 0;">
