@@ -15,7 +15,7 @@
         </template>
         <template v-else-if="visited">
             <div class="tile-container">
-                <div class="tile-content">{{ value }}</div>
+                <div class="tile-content" :class="{ [`tile-${value}`]: true }">{{ value }}</div>
             </div>
         </template>
         <template v-else>
@@ -114,5 +114,37 @@ export default {
 
 .board-tile.empty {
     color: #eee;
+}
+
+.tile-1 {
+    color: blue;
+}
+
+.tile-2 {
+    color: green;
+}
+
+.tile-3 {
+    color: red;
+}
+
+.tile-4 {
+    color: purple;
+}
+
+.tile-5 {
+    color: purple;
+}
+
+.tile-6 {
+    color: purple;
+}
+
+.tile-7 {
+    color: purple;
+}
+
+.tile-8 {
+    color: purple;
 }
 </style>
