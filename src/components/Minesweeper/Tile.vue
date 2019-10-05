@@ -8,7 +8,9 @@
             <span class="white">F</span>
         </template>
         <template v-else-if="(isWin || isLoss) && value === -1">
-            <span>B</span>
+            <div :class="{ 'bg-red black': isMineMarked }">
+                <span>B</span>
+            </div>
         </template>
         <template v-else-if="visited">
             <span :class="{gray: value === 0}">{{ value }}</span>
@@ -50,6 +52,16 @@ export default {
             type: Number,
             required: true
         }
+    },
+    data () {
+        return {
+            isMineMarked: false
+        }
+    },
+    methods: {
+        markMine () {
+            this.isMineMarked = true
+        }
     }
 }
 </script>
@@ -63,8 +75,16 @@ export default {
     color: blue;
 }
 
+.black {
+    color: red;
+}
+
 .gray {
     color: #eee;
+}
+
+.bg-red {
+    background-color: red;
 }
 
 .visited {
@@ -74,7 +94,6 @@ export default {
 
 .board-tile {
     background-color: blue;
-    padding: 20px;
     border: solid 1px lightblue;
 }
 </style>

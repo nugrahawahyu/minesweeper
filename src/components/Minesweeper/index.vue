@@ -6,6 +6,7 @@
                 :key="j"
                 class="col" >
                 <Tile
+                    :ref="`tile_${i}_${j}`"
                     :value="node.value"
                     :row="i"
                     :column="j"
@@ -64,6 +65,16 @@ export default {
         },
         flagsLeft () {
             return this.mines - this.minesweeper.flags
+        },
+        mineTiles () {
+            const mineIndexes = this.minesweeper.mineIndexes
+            const tiles = []
+
+            mineIndexes.forEach((index) => {
+                tiles.push(this.$refs[`tile_${index[0]}_${index[1]}`][0])
+            })
+
+            return tiles
         }
     },
     watch: {
@@ -77,6 +88,9 @@ export default {
             if (this.isLoss) {
                 const mineIndexes = this.minesweeper.mineIndexes
                 this.disable = true
+                this.mineTiles.forEach((tile) => {
+                    tile.markMine()
+                })
                 this.$emit('loss', mineIndexes)
             }
         }
