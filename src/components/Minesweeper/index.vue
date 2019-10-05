@@ -6,7 +6,6 @@
                 :key="j"
                 class="col" >
                 <Tile
-                    :ref="`tile_${i}_${j}`"
                     :value="node.value"
                     :row="i"
                     :column="j"
