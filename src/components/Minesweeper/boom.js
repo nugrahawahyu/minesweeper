@@ -23,8 +23,11 @@ const waits = [
     },
 ]
 
+let skip = false
+
 function animateHelper (index, length, mineNodes, beforeNextCallback, resolve) {
-    if (index >= length) {
+    if (index >= length || skip) {
+        skip = false
         resolve()
         return
     }
@@ -49,5 +52,8 @@ export class Boom {
             animateHelper(0, mineNodes.length, mineNodes, beforeNextCallback, resolve)
         })
     }
-}
 
+    static skip () {
+        skip = true
+    }
+}
