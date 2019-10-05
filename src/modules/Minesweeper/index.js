@@ -9,6 +9,7 @@ export class Minesweeper {
         this.isLoss = false
         this.isWin = false
         this.flags = 0
+        this.mineIndexes = []
     }
 
     init () {
@@ -116,6 +117,8 @@ export class Minesweeper {
                 mineCounter += 1
             }
         }
+
+        this.mineIndexes = mineIndexes
 
         // init nodes
         for (let i = 0; i < row; i++) {

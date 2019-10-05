@@ -113,7 +113,7 @@
 </template>
 
 <script>
-import Minesweeper from './components/Minesweeper.vue'
+import Minesweeper from './components/Minesweeper'
 import Modal from './components/Modal.vue'
 import { setImmediate } from 'timers'
 

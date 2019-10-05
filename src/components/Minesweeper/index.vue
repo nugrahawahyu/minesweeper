@@ -4,31 +4,30 @@
             <div 
                 v-for="(node, j) of row"
                 :key="j"
-                class="col board-tile"
-                :class="{ visited: node.visited }"
-                @click="visit(i, j)"
-                @click.right.prevent="toggleFlagged(i, j)">
-                <template v-if="node.flagged">
-                    <span>F</span>
-                </template>
-                <template v-else-if="(isWin || isLoss) && node.value === -1">
-                    <span>B</span>
-                </template>
-                <template v-else-if="node.visited">
-                    <span :class="{gray: node.value === 0}">{{ node.value }}</span>
-                </template>
-                <template v-else>
-                    <span class="blue">-</span>
-                </template>
+                class="col" >
+                <Tile
+                    :value="node.value"
+                    :row="i"
+                    :column="j"
+                    :visited="node.visited"
+                    :flagged="node.flagged"
+                    :is-win="isWin"
+                    :is-loss="isLoss"
+                    @visit="visit"
+                    @toggle-flagged="toggleFlagged" />
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import { Minesweeper } from '../modules/Minesweeper'
+import Tile from './Tile'
+import { Minesweeper } from '../../modules/Minesweeper'
 
 export default {
+    components: {
+        Tile
+    },
     props: {
         row: {
             type: Number,
@@ -76,8 +75,9 @@ export default {
         },
         isLoss () {
             if (this.isLoss) {
+                const mineIndexes = this.minesweeper.mineIndexes
                 this.disable = true
-                this.$emit('loss')
+                this.$emit('loss', mineIndexes)
             }
         }
     },
@@ -97,15 +97,15 @@ export default {
             this.disable = false
             this.init()
         },
-        visit (x, y) {
+        visit ({row, column}) {
             if (this.disable) return
-            this.minesweeper.visit(x, y)
+            this.minesweeper.visit(row, column)
             this.minesweeper.check()
             this.$forceUpdate()
         },
-        toggleFlagged (x, y) {
-            if (this.minesweeper.board[x][y].visited) return
-            this.minesweeper.toggleFlagged(x, y)
+        toggleFlagged ({row, column}) {
+            if (this.minesweeper.board[row][column].visited) return
+            this.minesweeper.toggleFlagged(row, column)
             this.$forceUpdate()
             this.minesweeper.check()
             this.$emit('toggle-flag', this.flagsLeft)
@@ -128,28 +128,5 @@ export default {
 
 .col {
     flex: 1;
-}
-
-.board-tile {
-    background-color: blue;
-    padding: 20px;
-    border: solid 1px lightblue;
-}
-
-.white {
-    color: white;
-}
-
-.blue {
-    color: blue;
-}
-
-.gray {
-    color: #eee;
-}
-
-.visited {
-    background-color: #eee;
-    color: black; 
 }
 </style>
