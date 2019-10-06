@@ -1,6 +1,6 @@
 <template>
     <div 
-        class="board-tile"
+        class="board-tile noselect"
         :class="containerClass"
         @click="$emit('visit', { row, column })"
         @click.right.prevent="$emit('toggle-flagged', { row, column })" >
@@ -75,6 +75,16 @@ export default {
 </script>
 
 <style scoped>
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
+}
+
 .tile-container {
     position: relative;
     height: 100%;
