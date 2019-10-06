@@ -135,7 +135,7 @@ export default {
             this.$emit('toggle-flag', this.flagsLeft)
         },
         toggleFlagged ({row, column}) {
-            if (this.minesweeper.board[row][column].visited || this.flagsLeft <= 0) return
+            if (this.disable || this.minesweeper.board[row][column].visited || this.flagsLeft <= 0) return
             this.minesweeper.toggleFlagged(row, column)
             this.$forceUpdate()
             this.minesweeper.check()
