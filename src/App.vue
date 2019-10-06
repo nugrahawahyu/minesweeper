@@ -38,6 +38,10 @@
     </template>
 
     <Modal v-if="showModal">
+        <template slot="header">
+          <span v-if="isWin">🎉</span>
+          <span v-else>😿</span>
+        </template>
         <template slot="body">
           <div class="flex-grid" style="padding: 32px 0;">
             <div class="col">
@@ -193,7 +197,7 @@ export default {
       started: false,
       config: null,
       showModal: false,
-      showOnBoarding: true
+      showOnBoarding: true,
     }
   },
   computed: {
@@ -214,6 +218,9 @@ export default {
     },
     configs () {
       return allPlatformConfigs.filter(c => c.platform === this.platform)
+    },
+    backgroundAudio () {
+      return new Audio('https://upload.wikimedia.org/wikipedia/commons/4/43/JOHN_MICHEL_CELLO-J_S_BACH_CELLO_SUITE_1_in_G_Prelude.ogg')
     }
   },
   watch: {
@@ -227,6 +234,7 @@ export default {
     },
     isWin () {
       if (this.isWin) {
+        this.backgroundAudio.play()
         if (this.timer < this.highestScore[this.config.level]) {
           this.highestScore[this.config.level] = this.timer
           this.writeHighestScore()
@@ -237,6 +245,7 @@ export default {
     },
     isLoss () {
       if (this.isLoss) {
+        this.backgroundAudio.play()
         this.showModal = true
         this.timerInterval = null
       }
@@ -275,13 +284,11 @@ export default {
       setImmediate(() => {
         this.started = true
         this.resetState()
-        this.resetTimer()
       })
     },
     restart () {
       this.resetState()      
       this.$refs.minesweeper.restart()
-      this.resetTimer()
     },
     resetTimer () {
       this.timerInterval = setInterval(() => {
@@ -294,6 +301,11 @@ export default {
       this.isLoss = false
       this.showModal = false
       this.timer = 0
+      this.resetTimer()
+      if (this.backgroundAudio) {
+        this.backgroundAudio.pause()
+        this.backgroundAudio.currentTime = 0.0
+      }
     }
   },
 }
