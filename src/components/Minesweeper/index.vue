@@ -163,6 +163,10 @@ export default {
                 this.boom.skip()
             }
         }
+    },
+    beforeDestroy () {
+        delete this.minesweeper
+        delete this.boom
     }
 }
 </script>
