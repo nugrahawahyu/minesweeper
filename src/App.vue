@@ -81,7 +81,8 @@
                     Open a tile:
                   </div>
                   <div class="col align-left" style="margin-left: 10px;">
-                    Left click
+                    <span v-if="platform === 'desktop'">Left click</span>
+                    <span v-else>Tap</span>
                   </div>
                 </div>
             </div>
@@ -93,7 +94,8 @@
                     Toggle a flag:
                   </div>
                   <div class="col align-left" style="margin-left: 10px;">
-                    Right click
+                    <span v-if="platform === 'desktop'">Right click</span>
+                    <span v-else>Hold</span>
                   </div>
                 </div>
             </div>
