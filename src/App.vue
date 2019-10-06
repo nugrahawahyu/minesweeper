@@ -214,7 +214,7 @@ export default {
       return this.started || this.showOnBoarding
     },
     platform () {
-      return !!md.mobile() ? 'mobile' : 'desktop'
+      return md.mobile() ? 'mobile' : 'desktop'
     },
     configs () {
       return allPlatformConfigs.filter(c => c.platform === this.platform)
