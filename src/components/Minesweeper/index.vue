@@ -98,11 +98,13 @@ export default {
                     if (!this.animating) this.animating = true
                     this.$forceUpdate()
                 })
-                this.animating = false
                 if (!this.lossEmitted) {
                     setTimeout(() => {
+                        this.animating = false
                         this.$emit('loss')
                     }, 3000)
+                } else {
+                    this.animating = false
                 }
             }
         }
