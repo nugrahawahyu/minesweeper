@@ -46,6 +46,7 @@ export default {
     },
     data () {
         return {
+            oldMinesweeper: null,
             minesweeper: new Minesweeper({ 
                 row: this.row,
                 column: this.column,
@@ -93,6 +94,7 @@ export default {
                 const { row, column } = this.minesweeper.clickedMine
                 const mineNodes = this.minesweeper.getMinesFrom(row, column)
                 const boom = new Boom()
+                delete this.boom
                 this.boom = boom
                 this.disable = true
                 this.$emit('stop')
@@ -119,11 +121,13 @@ export default {
             this.minesweeper.init()
         },
         restart () {
+            this.oldMinesweeper = this.minesweeper
             this.minesweeper = new Minesweeper({ 
                 row: this.row,
                 column: this.column,
                 totalMine: this.mines
             })
+            delete this.oldMinesweeper
             this.disable = false
             this.init()
         },
