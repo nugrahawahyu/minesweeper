@@ -6,7 +6,12 @@
         @click.right.prevent="$emit('toggle-flagged', { row, column })" >
         <template v-if="flagged">
             <div class="tile-container">
-                <div class="tile-content">F</div>
+                <template v-if="isLoss && value !== -1">
+                    <div class="tile-content">X</div>
+                </template>
+                <template v-else>
+                    <div class="tile-content">F</div>
+                </template>
             </div>
         </template>
         <template v-else-if="(isWin || isLoss) && value === -1">
