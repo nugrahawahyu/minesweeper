@@ -165,6 +165,7 @@ export default {
         }
     },
     beforeDestroy () {
+        delete this.oldMinesweeper
         delete this.minesweeper
         delete this.boom
     }
