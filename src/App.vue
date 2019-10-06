@@ -1,7 +1,7 @@
 <template>
   <div id="app" :style="`max-width: ${config.maxWidth};`">
-    <div class="grid-container">
-      <div class="grid-item">
+    <div class="game-header grid-container">
+      <div class="grid-item align-left">
         <select name="size" v-model="config">
           <option v-for="(config, i) in configs" v-bind:value="config" :key="i" >
             {{ config.text }}
@@ -9,12 +9,14 @@
         </select>
       </div>
       <div class="grid-item">
-          <div class="grid-container-6-of-12">
+          <div class="game-stats grid-container-6-of-12">
             <div class="grid-item">
-              {{ flagsLeft }}
+              <i class="fas fa-flag"></i>
+              <span>{{ flagsLeft }}</span>
             </div>
             <div class="grid-item">
-              {{ timer }}
+              <i class="fas fa-stopwatch"></i>
+              <span>{{ timer }}</span>
             </div>
           </div>
       </div>
@@ -306,6 +308,19 @@ export default {
   margin: 0 auto;
 }
 
+.game-header {
+  padding: 10px;
+  background-color: #ddd;
+}
+
+.game-stats {
+  font-size: 14px;
+}
+
+.game-stats .fas {
+  padding-right: 10px;
+}
+
 .input-container {
   text-align: left;
   width: 300px;
@@ -334,9 +349,6 @@ export default {
 }
 
 .grid-item {
-    background-color: rgba(255, 255, 255, 0.8);
-    padding: 20px;
-    font-size: 30px;
     text-align: center;
 }
 
