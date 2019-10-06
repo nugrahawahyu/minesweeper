@@ -52,7 +52,8 @@ export default {
                 totalMine: this.mines
             }),
             disable: false,
-            animating: false
+            animating: false,
+            lossEmitted: false
         }
     },
     computed: {
@@ -90,6 +91,7 @@ export default {
             if (this.isLoss) {
                 const { row, column } = this.minesweeper.clickedMine
                 const mineNodes = this.minesweeper.getMinesFrom(row, column)
+                this.lossEmitted = false
                 this.disable = true
                 this.$emit('stop')
                 await Boom.animate(mineNodes, () => {
@@ -97,7 +99,11 @@ export default {
                     this.$forceUpdate()
                 })
                 this.animating = false
-                this.$emit('loss')
+                if (!this.lossEmitted) {
+                    setTimeout(() => {
+                        this.$emit('loss')
+                    }, 3000)
+                }
             }
         }
     },
@@ -136,8 +142,8 @@ export default {
         },
         skipAnimate () {
             if (this.animating) {
-                Boom.skip()
-                this.minesweeper.markAllMines()
+                this.lossEmitted = true
+                this.$emit('loss')
             }
         }
     }
