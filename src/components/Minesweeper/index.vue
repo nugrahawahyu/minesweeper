@@ -53,7 +53,8 @@ export default {
             }),
             disable: false,
             animating: false,
-            lossEmitted: false
+            boom: null,
+            idleTimeout: null
         }
     },
     computed: {
@@ -91,20 +92,21 @@ export default {
             if (this.isLoss) {
                 const { row, column } = this.minesweeper.clickedMine
                 const mineNodes = this.minesweeper.getMinesFrom(row, column)
-                this.lossEmitted = false
+                const boom = new Boom()
+                this.boom = boom
                 this.disable = true
                 this.$emit('stop')
-                await Boom.animate(mineNodes, () => {
-                    if (!this.animating) this.animating = true
+                await boom.animate(mineNodes, () => {
+                    if (!this.animating && !boom.skipped) this.animating = true
                     this.$forceUpdate()
                 })
-                if (!this.lossEmitted) {
-                    setTimeout(() => {
-                        this.animating = false
-                        this.$emit('loss')
-                    }, 3000)
+                this.animating = false
+                if (boom.skipped) {
+                    this.emitLoss()
                 } else {
-                    this.animating = false
+                    this.idleTimeout = setTimeout(() => {
+                        this.emitLoss()
+                    }, 3000)
                 }
             }
         }
@@ -142,10 +144,19 @@ export default {
         check () {
             this.minesweeper.check()
         },
+        emitLoss () {
+            clearTimeout(this.idleTimeout)
+            this.boom = null
+            this.idleTimeout = null
+            this.$emit('loss')
+        },
         skipAnimate () {
-            if (this.animating) {
-                this.lossEmitted = true
-                this.$emit('loss')
+            if (this.idleTimeout) {
+                this.emitLoss()
+            }
+
+            if (this.animating && this.boom) {
+                this.boom.skip()
             }
         }
     }

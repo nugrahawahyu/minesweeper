@@ -23,12 +23,15 @@ const waits = [
     },
 ]
 
-let skip = false
-
-function animateHelper (index, length, mineNodes, beforeNextCallback, resolve) {
-    if (index >= length || skip) {
-        skip = false
+function animateHelper (index, length, mineNodes, beforeNextCallback, resolve, boom) {
+    if (boom.skipped) {
         resolve()
+    }
+
+    if (index >= length) {
+        if (!boom.skipped) {
+            resolve()
+        }
         return
     }
 
@@ -41,19 +44,22 @@ function animateHelper (index, length, mineNodes, beforeNextCallback, resolve) {
 
     setTimeout(() => {
         beforeNextCallback()
-        animateHelper(index+1, length, mineNodes, beforeNextCallback, resolve)
+        animateHelper(index+1, length, mineNodes, beforeNextCallback, resolve, boom)
     }, wait.duration)
 }
 
 export class Boom {
-    static animate (mineNodes, beforeNextCallback = () => {}) {
-        return new Promise((resolve) => {
+    constructor () {
+        this.skipped = false
+    }
 
-            animateHelper(0, mineNodes.length, mineNodes, beforeNextCallback, resolve)
+    animate (mineNodes, beforeNextCallback = () => {}) {
+        return new Promise((resolve) => {
+            animateHelper(0, mineNodes.length, mineNodes, beforeNextCallback, resolve, this)
         })
     }
 
-    static skip () {
-        skip = true
+    skip () {
+        this.skipped = true
     }
 }
