@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" :style="`max-width: ${config.maxWidth};`">
     <div class="grid-container">
       <div class="grid-item">
         <select name="size" v-model="config">
@@ -111,27 +111,60 @@
 import Minesweeper from './components/Minesweeper'
 import Modal from './components/Modal.vue'
 import { setImmediate } from 'timers'
+import MobileDetect from 'mobile-detect'
+
+const md = new MobileDetect(window.navigator.userAgent);
 
 const HIGHEST_SCORE_CACHE_KEY = 'highest_score'
 
-const configs = [
+const allPlatformConfigs = [
   {
+    platform: 'desktop',
+    maxWidth: '400px',
     text: 'Easy',
     level: 'easy',
     mines: 10,
     size: [10, 10]
   },
   {
+    platform: 'desktop',
+    maxWidth: '700px',
     text: 'Medium',
     level: 'medium',
     mines: 40,
     size: [18, 18]
   },
   {
+    platform: 'desktop',
+    maxWidth: '900px',
     text: 'Hard',
     level: 'hard',
     mines: 99,
     size: [24, 24]
+  },
+    {
+    platform: 'mobile',
+    maxWidth: '100%',
+    text: 'Easy',
+    level: 'easy',
+    mines: 10,
+    size: [10, 10]
+  },
+  {
+    platform: 'mobile',
+    maxWidth: '100%',
+    text: 'Medium',
+    level: 'medium',
+    mines: 40,
+    size: [27, 12]
+  },
+  {
+    platform: 'mobile',
+    maxWidth: '100%',
+    text: 'Hard',
+    level: 'hard',
+    mines: 99,
+    size: [48, 12]
   },
 ]
     
@@ -154,8 +187,7 @@ export default {
       isLoss: false,
       flagsLeft: 0,
       started: false,
-      config: configs[0],
-      configs,
+      config: null,
       showModal: false,
       showOnBoarding: true
     }
@@ -173,6 +205,12 @@ export default {
     gameReady () {
       return this.started || this.showOnBoarding
     },
+    platform () {
+      return !!md.mobile() ? 'mobile' : 'desktop'
+    },
+    configs () {
+      return allPlatformConfigs.filter(c => c.platform === this.platform)
+    }
   },
   watch: {
     config () {
@@ -201,6 +239,7 @@ export default {
     }
   },
   created () {
+    this.config = this.configs[0]
     this.readHighestScore()
   },
   methods: {
@@ -265,10 +304,6 @@ export default {
   color: #2c3e50;
   max-width: 1000px;
   margin: 0 auto;
-}
-
-.container {
-  padding: 32px;
 }
 
 .input-container {
