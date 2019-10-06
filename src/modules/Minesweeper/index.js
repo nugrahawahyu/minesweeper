@@ -81,6 +81,7 @@ export class Minesweeper {
         if (node.value === 0) {
             for (let neighbor of neighbors) {
                 if (neighbor.flagged) {
+                    this.flags -= 1
                     neighbor.toggleFlagged()
                 }
                 this.visit(neighbor.row, neighbor.column)
