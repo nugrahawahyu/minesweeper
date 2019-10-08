@@ -1,7 +1,7 @@
 <template>
     <div class="container" @click="skipAnimate">
         <div class="flex-grid white" v-for="(row, i) of board" :key="i">
-            <div 
+            <div
                 v-for="(node, j) of row"
                 :key="j"
                 class="col" >
@@ -47,7 +47,7 @@ export default {
     data () {
         return {
             oldMinesweeper: null,
-            minesweeper: new Minesweeper({ 
+            minesweeper: new Minesweeper({
                 row: this.row,
                 column: this.column,
                 totalMine: this.mines
@@ -122,7 +122,7 @@ export default {
         },
         restart () {
             this.oldMinesweeper = this.minesweeper
-            this.minesweeper = new Minesweeper({ 
+            this.minesweeper = new Minesweeper({
                 row: this.row,
                 column: this.column,
                 totalMine: this.mines
@@ -139,7 +139,8 @@ export default {
             this.$emit('toggle-flag', this.flagsLeft)
         },
         toggleFlagged ({row, column}) {
-            if (this.disable || this.minesweeper.board[row][column].visited || this.flagsLeft <= 0) return
+            if (this.disable || this.minesweeper.board[row][column].visited ||
+                (this.flagsLeft <= 0 && !this.minesweeper.board[row][column].flagged)) return
             this.minesweeper.toggleFlagged(row, column)
             this.$forceUpdate()
             this.minesweeper.check()
@@ -189,7 +190,7 @@ export default {
     flex-flow: row;
     -webkit-flex-flow: row;
     justify-content: space-around;
-   
+
     line-height:30px;
 }
 
