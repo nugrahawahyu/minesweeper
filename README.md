@@ -1,4 +1,4 @@
-# mine_sweaper
+# Minesweeper
 
 ## Project setup
 ```
