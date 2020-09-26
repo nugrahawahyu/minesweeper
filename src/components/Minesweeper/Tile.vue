@@ -1,5 +1,5 @@
 <template>
-    <div 
+    <div
         class="board-tile noselect"
         :class="containerClass"
         @click="$emit('visit', { row, column })"
@@ -119,7 +119,7 @@ export default {
 
 .board-tile.visited {
     background-color: #eee !important;
-    color: black; 
+    color: black;
 }
 
 .board-tile.marked {
@@ -161,5 +161,21 @@ export default {
 
 .tile-8 {
     color: purple;
+}
+
+.dark-mode .board-tile {
+  border-color: #333;
+  color: darkblue;
+  background-color: darkblue;
+}
+
+.dark-mode .board-tile.visited {
+  background-color: #111 !important;
+  color: #111;
+}
+
+.dark-mode .board-tile.marked {
+  background-color: darkred;
+  color: darkred;
 }
 </style>

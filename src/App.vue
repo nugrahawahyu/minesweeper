@@ -21,10 +21,13 @@
           </div>
       </div>
       <div class="grid-item">
-
-      </div>  
+        <div class="dark-mode-toggle align-right">
+          <i class="fas fa-moon"></i>
+          <input type="checkbox" v-model="isDarkMode" name="dark-mode-chooser" @change="toggleDarkMode()">
+        </div>
+      </div>
     </div>
-    
+
     <template v-if="gameReady" >
       <Minesweeper
         ref="minesweeper"
@@ -32,8 +35,8 @@
         @win="isWin = true"
         @loss="isLoss = true"
         @toggle-flag="flagsLeft = $event"
-        :row="row" 
-        :column="column" 
+        :row="row"
+        :column="column"
         :mines="mines" />
     </template>
 
@@ -175,7 +178,7 @@ const allPlatformConfigs = [
     size: [48, 12]
   },
 ]
-    
+
 export default {
   name: 'app',
   components: {
@@ -198,6 +201,7 @@ export default {
       config: null,
       showModal: false,
       showOnBoarding: true,
+      isDarkMode: false,
     }
   },
   computed: {
@@ -254,11 +258,13 @@ export default {
   created () {
     this.config = this.configs[0]
     this.readHighestScore()
+    this.isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+    this.toggleDarkMode()
   },
   methods: {
     readHighestScore () {
       let highestScore = this.highestScore
-      
+
       const cached = localStorage.getItem(HIGHEST_SCORE_CACHE_KEY)
 
       if (cached) {
@@ -287,7 +293,7 @@ export default {
       })
     },
     restart () {
-      this.resetState()      
+      this.resetState()
       this.$refs.minesweeper.restart()
     },
     resetTimer () {
@@ -305,6 +311,17 @@ export default {
       if (this.backgroundAudio) {
         this.backgroundAudio.pause()
         this.backgroundAudio.currentTime = 0.0
+      }
+    },
+    toggleDarkMode () {
+      const bodyElement = document.body
+      const className = "dark-mode"
+      if (this.isDarkMode) {
+        bodyElement.classList.add(className)
+        bodyElement.style.background = "#000"
+      } else {
+        bodyElement.classList.remove(className)
+        bodyElement.style.removeProperty("background")
       }
     }
   },
@@ -325,6 +342,15 @@ export default {
 .game-header {
   padding: 10px;
   background-color: #ddd;
+}
+
+.dark-mode .game-header {
+  background-color: #222;
+  color: #fff;
+}
+
+.dark-mode-toggle .fas {
+  padding-right: 5px;
 }
 
 .game-stats {
