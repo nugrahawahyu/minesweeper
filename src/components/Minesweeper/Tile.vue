@@ -113,10 +113,6 @@ export default {
     border: solid 1px lightblue;
 }
 
-.board-tile.flagged {
-    color: white;
-}
-
 .board-tile.visited {
     background-color: #eee !important;
     color: black;
@@ -177,5 +173,9 @@ export default {
 .dark-mode .board-tile.marked {
   background-color: darkred;
   color: darkred;
+}
+
+.board-tile.flagged {
+  color: white;
 }
 </style>
